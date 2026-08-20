@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ movie.title }} - MovieHub{% endblock %}
+{% block content %}
+<section class="detail">
+<div>{% if movie.poster %}<img class="detail-poster" src="{{ movie.poster.url }}" alt="{{ movie.title }}">{% else %}<div class="detail-poster poster-placeholder">🎬</div>{% endif %}</div>
+<div>
+<p class="eyebrow">{{ movie.certification }} • {{ movie.duration_minutes }} min • {{ movie.language }}</p>
+<h1>{{ movie.title }}</h1><p class="rating">⭐ {{ movie.average_rating }}/5 <span>({{ movie.review_count }} reviews)</span></p>
+<p>{{ movie.description }}</p><p><b>Genre:</b> {{ movie.genre }}<br><b>Release:</b> {{ movie.release_date }}</p>
+{% if movie.youtube_video_id %}<div class="trailer"><iframe src="https://www.youtube-nocookie.com/embed/{{ movie.youtube_video_id }}" title="{{ movie.title }} trailer" allowfullscreen></iframe></div>{% endif %}
+</div></section>
+<section><h2>Showtimes</h2><div class="shows">{% for show in shows %}<div class="show"><b>{{ show.theater.name }}</b><span>{{ show.show_date }} • {{ show.start_time }}–{{ show.end_time }}</span><small>{{ show.available_seats }} seats left</small>{% if user.is_authenticated and show.available_seats %}<form method="post" action="{% url 'book_show' show.id %}">{% csrf_token %}<input type="number" name="seats" value="1" min="1" max="{{ show.available_seats }}"><button class="btn small">Book</button></form>{% elif not user.is_authenticated %}<a href="{% url 'login' %}" class="btn small">Login to Book</a>{% endif %}</div>{% empty %}<p>No upcoming shows.</p>{% endfor %}</div></section>
+<section><div class="section-head"><h2>Reviews</h2>{% if can_review %}<a class="btn small" href="{% url 'review_create' movie.slug %}">Write Review</a>{% endif %}</div>
+{% for review in reviews %}<div class="review"><div><b>{{ review.user.username }}</b>{% if review.verified_viewer %}<span class="badge">✓ Verified Viewer</span>{% endif %}<span>⭐ {{ review.rating }}/5</span></div><p>{{ review.text }}</p><small>{{ review.created_at|date:"d M Y" }}</small>{% if review.user == user %}<a href="{% url 'review_edit' review.id %}">Edit</a>{% elif user.is_authenticated %}<a href="{% url 'review_report' review.id %}">Report</a>{% endif %}</div>{% empty %}<p>No reviews yet.</p>{% endfor %}</section>
+<section><h2>Similar Movies</h2><div class="grid">{% for movie in similar %}{% include "movies/card.html" %}{% empty %}<p>No similar movies available.</p>{% endfor %}</div></section>
+{% endblock %}

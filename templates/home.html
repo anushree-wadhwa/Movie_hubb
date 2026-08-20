@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}MovieHub - Home{% endblock %}
+{% block content %}
+<section class="hero">
+  <div><p class="eyebrow">YOUR MOVIE DESTINATION</p><h1>Discover. Book. Watch. Review.</h1><p>Explore movies, trailers, showtimes and verified viewer reviews.</p><a class="btn" href="{% url 'movie_list' %}">Explore Movies</a></div>
+</section>
+<section><div class="section-head"><h2>🔥 Trending</h2><a href="{% url 'movie_list' %}">View all</a></div><div class="grid">{% for movie in trending %}{% include "movies/card.html" %}{% empty %}<p>No movies yet. Add them from the admin panel.</p>{% endfor %}</div></section>
+<section><div class="section-head"><h2>✨ Recently Released</h2></div><div class="grid">{% for movie in recent %}{% include "movies/card.html" %}{% endfor %}</div></section>
+{% endblock %}

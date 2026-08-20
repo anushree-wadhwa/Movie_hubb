@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Movies - MovieHub{% endblock %}
+{% block content %}
+<section class="page-title"><h1>Movies</h1><form class="search"><input name="q" value="{{ q }}" placeholder="Search movies..."><button class="btn">Search</button></form></section>
+<div class="grid">{% for movie in movies %}{% include "movies/card.html" %}{% empty %}<p>No movies found.</p>{% endfor %}</div>
+{% endblock %}

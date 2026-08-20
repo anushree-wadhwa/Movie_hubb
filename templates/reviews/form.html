@@ -1,0 +1,3 @@
+{% extends "base.html" %}
+{% block title %}{% if editing %}Edit{% else %}Write{% endif %} Review{% endblock %}
+{% block content %}<div class="form-box"><h1>{% if editing %}Edit{% else %}Review{% endif %}: {{ movie.title }}</h1><form method="post">{% csrf_token %}{{ form.as_p }}<button class="btn">Save Review</button></form></div>{% endblock %}

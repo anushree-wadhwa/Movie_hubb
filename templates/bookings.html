@@ -1,0 +1,4 @@
+{% extends "base.html" %}
+{% block title %}My Bookings - MovieHub{% endblock %}
+{% block content %}<section class="page-title"><h1>My Bookings</h1></section>
+<div class="booking-list">{% for booking in bookings %}<div class="booking"><h3>{{ booking.show.movie.title }}</h3><p>{{ booking.show.theater.name }} • {{ booking.show.show_date }} • {{ booking.show.start_time }}</p><p>Seats: {{ booking.seats }} • Status: {{ booking.status }}</p>{% if booking.watched %}<span class="badge">✓ Watched</span>{% else %}<form method="post" action="{% url 'mark_watched' booking.id %}">{% csrf_token %}<button class="btn small">Mark as Watched</button></form>{% endif %}</div>{% empty %}<p>You have no bookings.</p>{% endfor %}</div>{% endblock %}
